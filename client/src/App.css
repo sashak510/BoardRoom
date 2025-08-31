@@ -1,12 +1,31 @@
 /* App.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100vw !important;
+}
+
 .App {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* BoardRoom App Layout */
@@ -293,81 +312,57 @@
   }
 }
 
-/* Meet the Team Section */
-.meet-team-section {
-  position: fixed;
-  bottom: 2rem;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 100;
-}
 
-.meet-team-btn {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 215, 0, 0.3);
-  border-radius: 25px;
-  padding: 0.8rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  animation: meetTeamFloat 3s ease-in-out infinite;
-}
-
-.meet-team-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 215, 0, 0.5);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
-}
-
-.meet-team-text {
-  color: rgba(255, 215, 0, 0.9);
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.meet-team-arrow {
-  color: rgba(255, 215, 0, 0.9);
-  font-size: 1.2rem;
-  animation: arrowBounce 2s ease-in-out infinite;
-}
-
-@keyframes meetTeamFloat {
-  0%, 100% { 
-    transform: translateY(0px);
-  }
-  50% { 
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes arrowBounce {
-  0%, 100% { 
-    transform: translateY(0px);
-  }
-  50% { 
-    transform: translateY(3px);
-  }
-}
 
 /* Team Section */
 .team-section {
   min-height: 100vh;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  padding: 4rem 2rem;
+  padding: 1rem;
   position: relative;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.3s ease-out forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.team-section.fade-out {
+  animation: slideOutDown 0.25s ease-in forwards;
+  pointer-events: none; /* Prevent interactions during fade out */
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
 .team-section-content {
-  max-width: 1200px;
+  max-width: 85vw;
+  width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .team-section-title {
@@ -375,7 +370,7 @@
   font-size: 3rem;
   font-weight: 700;
   color: white;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
   background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -384,9 +379,33 @@
 
 .team-cards-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.team-cards-grid.compressed {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  bottom: 2rem;
+  width: 200px;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 0.5rem;
+  margin-bottom: 0;
+  overflow: hidden;
 }
 
 .team-member-card {
@@ -402,6 +421,47 @@
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+.team-cards-grid.compressed .team-member-card {
+  padding: 0.6rem;
+  border-radius: 10px;
+  flex: 1;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  text-align: center;
+}
+
+.team-cards-grid.compressed .team-member-avatar {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 0.3rem auto;
+}
+
+.team-cards-grid.compressed .team-member-name {
+  font-size: 1.2rem;
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.team-cards-grid.compressed .team-member-title {
+  font-size: 1rem;
+  line-height: 1.3;
+  overflow: visible;
+  text-overflow: unset;
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+.team-cards-grid.compressed .team-member-card.active {
+  display: none;
 }
 
 .team-member-card:hover {
@@ -457,9 +517,14 @@
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255, 215, 0, 0.2);
   border-radius: 20px;
-  padding: 3rem;
-  margin-top: 3rem;
+  padding: 2rem;
+  margin-top: 0;
+  margin-right: 120px;
   animation: profileSlideIn 0.5s ease-out;
+  min-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  z-index: 1;
 }
 
 @keyframes profileSlideIn {
@@ -605,7 +670,7 @@
   }
   
   .team-cards-grid {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1rem;
   }
   
@@ -636,11 +701,9 @@
     font-size: 2rem;
   }
   
-  .meet-team-btn {
-    padding: 0.6rem 1.2rem;
+  .team-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.8rem;
   }
-  
-  .meet-team-text {
-    font-size: 0.9rem;
-  }
+
 }

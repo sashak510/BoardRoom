@@ -21,6 +21,9 @@ function App() {
   const [expandedPersona, setExpandedPersona] = useState<string | null>(null);
   const [typingText, setTypingText] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isInTeamSection, setIsInTeamSection] = useState(false);
+  const [teamSectionAnimating, setTeamSectionAnimating] = useState(false);
+  const [viewedPersonas, setViewedPersonas] = useState<Set<string>>(new Set());
 
   // Load conversation logs from localStorage on component mount
   useEffect(() => {
@@ -41,29 +44,59 @@ function App() {
 
   // Typing animation effect for persona descriptions
   useEffect(() => {
+    let typingTimeout: NodeJS.Timeout;
+    let isActive = true;
+    
     if (expandedPersona && AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS]) {
       const persona = AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS];
       const fullText = persona.description;
-      setTypingText('');
-      setIsTyping(true);
       
-      let currentIndex = 0;
-      const typingSpeed = 15; // milliseconds per character
+      // Check if this persona has been viewed before
+      const hasBeenViewed = viewedPersonas.has(expandedPersona);
       
-      const typeText = () => {
-        if (currentIndex < fullText.length) {
-          setTypingText(fullText.substring(0, currentIndex + 1));
-          currentIndex++;
-          setTimeout(typeText, typingSpeed);
-        } else {
-          setIsTyping(false);
-        }
-      };
-      
-      // Start typing after a brief delay
-      setTimeout(typeText, 500);
+      if (hasBeenViewed) {
+        // If already viewed, show full text immediately
+        setTypingText(fullText);
+        setIsTyping(false);
+      } else {
+        // If new persona, do typing animation
+        setTypingText('');
+        setIsTyping(true);
+        
+        let currentIndex = 0;
+        const typingSpeed = 15; // milliseconds per character
+        
+        const typeText = () => {
+          if (!isActive) return; // Stop if component unmounted or persona changed
+          
+          if (currentIndex < fullText.length) {
+            setTypingText(fullText.substring(0, currentIndex + 1));
+            currentIndex++;
+            typingTimeout = setTimeout(typeText, typingSpeed);
+          } else {
+            setIsTyping(false);
+            // Mark this persona as viewed when typing completes
+            setViewedPersonas(prev => {
+              const newSet = new Set(prev);
+              newSet.add(expandedPersona);
+              return newSet;
+            });
+          }
+        };
+        
+        // Start typing after a brief delay
+        typingTimeout = setTimeout(typeText, 500);
+      }
     }
-  }, [expandedPersona]);
+    
+    // Cleanup function to prevent memory leaks and text glitching
+    return () => {
+      isActive = false;
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+    };
+  }, [expandedPersona, viewedPersonas]);
 
   const startNewConversation = () => {
     setCurrentConversation([]);
@@ -135,10 +168,34 @@ function App() {
   };
 
   const scrollToTeam = () => {
-    const teamSection = document.getElementById('team-section');
-    if (teamSection) {
-      teamSection.scrollIntoView({ behavior: 'smooth' });
-    }
+    // First show the team section
+    setIsInTeamSection(true);
+    
+    // Then scroll to it after a brief delay to ensure it's rendered
+    setTimeout(() => {
+      const teamSection = document.getElementById('team-section');
+      if (teamSection) {
+        teamSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
+  };
+
+  const scrollToHome = () => {
+    // Start fade out animation immediately without closing persona first
+    setTeamSectionAnimating(true);
+    
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Hide team section and clean up state after animation completes
+    setTimeout(() => {
+      setIsInTeamSection(false);
+      setTeamSectionAnimating(false);
+      // Clean up persona state after transition is complete
+      setExpandedPersona(null);
+      setTypingText('');
+      setIsTyping(false);
+    }, 300);
   };
 
   const handleClosePersona = () => {
@@ -150,7 +207,80 @@ function App() {
   return (
     <div className="App">
       {showLandingPage ? (
-        <LandingPage onEnterBoardroom={handleEnterBoardroom} />
+        <>
+          <LandingPage onEnterBoardroom={handleEnterBoardroom} onMeetTeam={scrollToTeam} isInTeamSection={isInTeamSection} onBackToHome={scrollToHome} />
+          
+          {/* Team Section - only show when in team section */}
+          {isInTeamSection && (
+            <div id="team-section" className={`team-section ${teamSectionAnimating ? 'fade-out' : ''}`}>
+            <div className="team-section-content">
+              <h2 className="team-section-title">Your Advisory Team</h2>
+              
+              <div className={`team-cards-grid ${expandedPersona ? 'compressed' : ''}`}>
+                {Object.values(AGENT_PERSONAS).map((persona) => (
+                  <div 
+                    key={persona.id} 
+                    className={`team-member-card ${expandedPersona === persona.id ? 'active' : ''}`}
+                    onClick={() => handlePersonaClick(persona.id)}
+                  >
+                    <img 
+                      src={persona.avatar} 
+                      alt={persona.name}
+                      className="team-member-avatar"
+                      draggable="false"
+                    />
+                    <h3 className="team-member-name">{persona.name}</h3>
+                    <p className="team-member-title">{persona.title}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Expanded Profile Section */}
+              {expandedPersona && (
+                <div className="expanded-profile">
+                  <div className="profile-header">
+                    <img 
+                      src={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].avatar} 
+                      alt={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
+                      className="profile-large-avatar"
+                      draggable="false"
+                    />
+                    <div className="profile-info">
+                      <h2 className="profile-name">
+                        {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
+                      </h2>
+                      <h3 className="profile-title">
+                        {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].title}
+                      </h3>
+                    </div>
+                    <button className="close-profile-btn" onClick={handleClosePersona}>
+                      ✕
+                    </button>
+                  </div>
+
+                  <div className="profile-description">
+                    <div className="typing-text">
+                      {typingText}
+                      {isTyping && <span className="typing-cursor">|</span>}
+                    </div>
+                  </div>
+
+                  <div className="profile-specialties">
+                    <h4>Specialties:</h4>
+                    <div className="specialties-grid">
+                      {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].specialties.map((specialty, index) => (
+                        <span key={index} className="specialty-badge">
+                          {specialty}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+          )}
+        </>
       ) : (
         <div className="boardroom-app">
           {/* Boardroom Background - Left Side (65%) */}
@@ -237,85 +367,8 @@ function App() {
           </div>
         </div>
       )}
-
-      {/* Meet the Team Section at Bottom - show on both landing page and boardroom */}
-      <div className="meet-team-section">
-        <button className="meet-team-btn" onClick={scrollToTeam}>
-          <span className="meet-team-text">Meet the Team</span>
-          <span className="meet-team-arrow">↓</span>
-        </button>
-      </div>
-
-      {/* Team Section */}
-      <div id="team-section" className="team-section">
-        <div className="team-section-content">
-          <h2 className="team-section-title">Your Advisory Team</h2>
-          
-          <div className="team-cards-grid">
-            {Object.values(AGENT_PERSONAS).map((persona) => (
-              <div 
-                key={persona.id} 
-                className={`team-member-card ${expandedPersona === persona.id ? 'active' : ''}`}
-                onClick={() => handlePersonaClick(persona.id)}
-              >
-                <img 
-                  src={persona.avatar} 
-                  alt={persona.name}
-                  className="team-member-avatar"
-                  draggable="false"
-                />
-                <h3 className="team-member-name">{persona.name}</h3>
-                <p className="team-member-title">{persona.title}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Expanded Profile Section */}
-          {expandedPersona && (
-            <div className="expanded-profile">
-              <div className="profile-header">
-                <img 
-                  src={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].avatar} 
-                  alt={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
-                  className="profile-large-avatar"
-                  draggable="false"
-                />
-                <div className="profile-info">
-                  <h2 className="profile-name">
-                    {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
-                  </h2>
-                  <h3 className="profile-title">
-                    {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].title}
-                  </h3>
-                </div>
-                <button className="close-profile-btn" onClick={handleClosePersona}>
-                  ✕
-                </button>
-              </div>
-
-              <div className="profile-description">
-                <div className="typing-text">
-                  {typingText}
-                  {isTyping && <span className="typing-cursor">|</span>}
-                </div>
-              </div>
-
-              <div className="profile-specialties">
-                <h4>Specialties:</h4>
-                <div className="specialties-grid">
-                  {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].specialties.map((specialty, index) => (
-                    <span key={index} className="specialty-badge">
-                      {specialty}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   );
 }
 
-export default App;
+export default App; 

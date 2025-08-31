@@ -73,10 +73,10 @@ Whether you're launching your first product or scaling to new markets, I'll help
   },
   finance: {
     id: 'finance',
-    name: 'Victoria Chen',
+    name: 'Raj Patel',
     title: 'Finance Expert',
     avatar: '/avatars/Finance Expert.png',
-    description: `I'm Victoria Chen, your finance expert who turns numbers into strategic insights and financial chaos into sustainable growth. While others focus on ideas and execution, I focus on the financial foundation that makes everything possible.
+    description: `I'm Raj Patel, your finance expert who turns numbers into strategic insights and financial chaos into sustainable growth. While others focus on ideas and execution, I focus on the financial foundation that makes everything possible.
 
 My expertise covers financial modeling, fundraising strategies, cash flow management, and investor relations. I understand how to structure deals, optimize capital allocation, and build financial systems that scale with your business growth.
 
