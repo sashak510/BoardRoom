@@ -1,0 +1,35 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400">
+  <style>
+    .title {
+      font-family: 'Times New Roman', serif;
+      font-weight: bold;
+      fill: url(#goldGradient);
+    }
+    .subtitle {
+      font-family: 'Times New Roman', serif;
+      font-size: 60px;
+      fill: url(#goldGradient);
+    }
+    .tagline {
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      fill: #444;
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="50%" stop-color="#ffd700"/>
+      <stop offset="100%" stop-color="#b8860b"/>
+    </linearGradient>
+  </defs>
+
+  <text x="50%" y="100" text-anchor="middle" font-size="80" class="title">BoardRoom</text>
+  <text x="50%" y="190" text-anchor="middle" font-size="65" fill="#000">Startup</text>
+  <text x="50%" y="280" text-anchor="middle" class="subtitle">Advisory Board</text>
+  <text x="50%" y="350" text-anchor="middle" class="tagline">
+    Expert AI advisors ready to discuss any startup or business strategy
+  </text>
+</svg>

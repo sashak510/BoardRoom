@@ -1,0 +1,178 @@
+/* ConversationStage.css */
+.conversation-stage {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 2rem;
+  min-height: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.stage-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.stage-lights {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: stageLights 4s ease-in-out infinite alternate;
+}
+
+@keyframes stageLights {
+  0% { 
+    transform: translateX(-50%) scale(1);
+    opacity: 0.3;
+  }
+  100% { 
+    transform: translateX(-50%) scale(1.2);
+    opacity: 0.6;
+  }
+}
+
+.avatars-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  max-width: 600px;
+}
+
+.generating-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+
+.thinking-bubble {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.thinking-dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.thinking-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #667eea;
+  animation: thinkingDots 1.5s infinite ease-in-out;
+}
+
+.thinking-dots span:nth-child(1) { animation-delay: -0.32s; }
+.thinking-dots span:nth-child(2) { animation-delay: -0.16s; }
+.thinking-dots span:nth-child(3) { animation-delay: 0s; }
+
+@keyframes thinkingDots {
+  0%, 80%, 100% { 
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  40% { 
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.thinking-text {
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.stage-welcome {
+  text-align: center;
+  color: white;
+  z-index: 2;
+  max-width: 500px;
+}
+
+.stage-welcome h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  opacity: 0.95;
+}
+
+.stage-welcome p {
+  margin: 0;
+  opacity: 0.8;
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .conversation-stage {
+    padding: 1.5rem;
+    min-height: 300px;
+  }
+  
+  .avatars-container {
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+  
+  .thinking-bubble {
+    padding: 1rem 1.5rem;
+  }
+  
+  .stage-welcome h3 {
+    font-size: 1.2rem;
+  }
+  
+  .stage-welcome p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .avatars-container {
+    gap: 1rem;
+  }
+  
+  .thinking-bubble {
+    padding: 0.75rem 1rem;
+    margin: 0 1rem;
+  }
+  
+  .thinking-text {
+    font-size: 0.8rem;
+  }
+}
