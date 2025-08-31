@@ -1,4 +1,4 @@
-# 🏛️ AI Startup Advisory BoardRoom
+# 🏛️ Startup Advisory BoardRoom
 
 A web application that simulates a live boardroom meeting between AI advisor personas, discussing monetisation strategies for startup directors. The advisors provide diverse perspectives while maintaining focus on business, technology, and entrepreneurship.
 
