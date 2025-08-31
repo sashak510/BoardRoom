@@ -76,8 +76,8 @@ const ConversationStage: React.FC<ConversationStageProps> = ({
 
       {!currentMessage && !isGenerating && (
         <div className="stage-welcome">
-          <h3>🎙️ Welcome to the AI Startup Advisory Podcast!</h3>
-          <p>Choose a topic and start the conversation to see the agents come to life</p>
+          <h3>🏛️ Welcome to the AI Startup Advisory Boardroom!</h3>
+          <p>Choose a topic and start the meeting to see the advisors come to life</p>
         </div>
       )}
     </div>

@@ -1,6 +1,6 @@
-# 🎙️ AI Startup Advisory Podcast
+# 🏛️ AI Startup Advisory BoardRoom
 
-A web application that simulates a live podcast-style conversation between five AI agent personas, discussing monetisation strategies for startup directors. The agents provide diverse perspectives while maintaining focus on business, technology, and entrepreneurship.
+A web application that simulates a live boardroom meeting between AI advisor personas, discussing monetisation strategies for startup directors. The advisors provide diverse perspectives while maintaining focus on business, technology, and entrepreneurship.
 
 ## ✨ Features
 
@@ -32,7 +32,7 @@ A web application that simulates a live podcast-style conversation between five 
 
 1. **Clone and navigate to the project**:
    ```bash
-   cd "/Users/sashakarniyuk/Project 2025/podcast-ai-agents"
+   cd "/Users/sashakarniyuk/Project 2025/BoardRoom"
    ```
 
 2. **Install all dependencies**:
@@ -62,7 +62,7 @@ A web application that simulates a live podcast-style conversation between five 
 ## 🏗️ Project Structure
 
 ```
-podcast-ai-agents/
+BoardRoom/
 ├── server/
 │   └── index.js              # Express.js backend with OpenAI integration
 ├── client/                   # React TypeScript frontend

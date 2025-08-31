@@ -87,7 +87,7 @@ async function generateAgentResponse(agentType, conversationHistory, userInput =
         role: "system",
         content: `${agent.systemPrompt}
 
-You are participating in a podcast-style discussion with other AI agents about the best ways for a startup director to make money. The conversation should feel natural and collaborative. You can:
+You are participating in a boardroom meeting discussion with other AI advisors about the best ways for a startup director to make money. The conversation should feel natural and collaborative. You can:
 - Build on others' ideas
 - Respectfully disagree and provide alternatives
 - Pass the conversation to another agent if the topic fits their expertise better

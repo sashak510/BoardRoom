@@ -20,7 +20,7 @@ function App() {
 
   // Load conversation logs from localStorage on component mount
   useEffect(() => {
-    const savedLogs = localStorage.getItem('podcast-conversation-logs');
+    const savedLogs = localStorage.getItem('boardroom-conversation-logs');
     if (savedLogs) {
       try {
         setConversationLogs(JSON.parse(savedLogs));
@@ -32,7 +32,7 @@ function App() {
 
   // Save conversation logs to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem('podcast-conversation-logs', JSON.stringify(conversationLogs));
+    localStorage.setItem('boardroom-conversation-logs', JSON.stringify(conversationLogs));
   }, [conversationLogs]);
 
   const startNewConversation = () => {

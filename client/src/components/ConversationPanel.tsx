@@ -105,7 +105,7 @@ const ConversationPanel: React.FC<ConversationPanelProps> = ({
     <div className="conversation-panel">
       <div className="conversation-header">
         <h2>
-          {isViewingLog ? '📖 Conversation Log' : '🎙️ Live Podcast'}
+          {isViewingLog ? '📖 Conversation Log' : '🏛️ Live Boardroom Meeting'}
         </h2>
         {isPlaying && !isPaused && !isViewingLog && (
           <div className="live-indicator">
