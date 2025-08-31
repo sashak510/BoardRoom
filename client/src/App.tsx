@@ -238,86 +238,82 @@ function App() {
         </div>
       )}
 
-      {/* Meet the Team Section at Bottom - only show when not on landing page */}
-      {!showLandingPage && (
-        <>
-          <div className="meet-team-section">
-            <button className="meet-team-btn" onClick={scrollToTeam}>
-              <span className="meet-team-text">Meet the Team</span>
-              <span className="meet-team-arrow">↓</span>
-            </button>
+      {/* Meet the Team Section at Bottom - show on both landing page and boardroom */}
+      <div className="meet-team-section">
+        <button className="meet-team-btn" onClick={scrollToTeam}>
+          <span className="meet-team-text">Meet the Team</span>
+          <span className="meet-team-arrow">↓</span>
+        </button>
+      </div>
+
+      {/* Team Section */}
+      <div id="team-section" className="team-section">
+        <div className="team-section-content">
+          <h2 className="team-section-title">Your Advisory Team</h2>
+          
+          <div className="team-cards-grid">
+            {Object.values(AGENT_PERSONAS).map((persona) => (
+              <div 
+                key={persona.id} 
+                className={`team-member-card ${expandedPersona === persona.id ? 'active' : ''}`}
+                onClick={() => handlePersonaClick(persona.id)}
+              >
+                <img 
+                  src={persona.avatar} 
+                  alt={persona.name}
+                  className="team-member-avatar"
+                  draggable="false"
+                />
+                <h3 className="team-member-name">{persona.name}</h3>
+                <p className="team-member-title">{persona.title}</p>
+              </div>
+            ))}
           </div>
 
-          {/* Team Section */}
-          <div id="team-section" className="team-section">
-            <div className="team-section-content">
-              <h2 className="team-section-title">Your Advisory Team</h2>
-              
-              <div className="team-cards-grid">
-                {Object.values(AGENT_PERSONAS).map((persona) => (
-                  <div 
-                    key={persona.id} 
-                    className={`team-member-card ${expandedPersona === persona.id ? 'active' : ''}`}
-                    onClick={() => handlePersonaClick(persona.id)}
-                  >
-                    <img 
-                      src={persona.avatar} 
-                      alt={persona.name}
-                      className="team-member-avatar"
-                      draggable="false"
-                    />
-                    <h3 className="team-member-name">{persona.name}</h3>
-                    <p className="team-member-title">{persona.title}</p>
-                  </div>
-                ))}
+          {/* Expanded Profile Section */}
+          {expandedPersona && (
+            <div className="expanded-profile">
+              <div className="profile-header">
+                <img 
+                  src={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].avatar} 
+                  alt={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
+                  className="profile-large-avatar"
+                  draggable="false"
+                />
+                <div className="profile-info">
+                  <h2 className="profile-name">
+                    {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
+                  </h2>
+                  <h3 className="profile-title">
+                    {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].title}
+                  </h3>
+                </div>
+                <button className="close-profile-btn" onClick={handleClosePersona}>
+                  ✕
+                </button>
               </div>
 
-              {/* Expanded Profile Section */}
-              {expandedPersona && (
-                <div className="expanded-profile">
-                  <div className="profile-header">
-                    <img 
-                      src={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].avatar} 
-                      alt={AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
-                      className="profile-large-avatar"
-                      draggable="false"
-                    />
-                    <div className="profile-info">
-                      <h2 className="profile-name">
-                        {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].name}
-                      </h2>
-                      <h3 className="profile-title">
-                        {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].title}
-                      </h3>
-                    </div>
-                    <button className="close-profile-btn" onClick={handleClosePersona}>
-                      ✕
-                    </button>
-                  </div>
-
-                  <div className="profile-description">
-                    <div className="typing-text">
-                      {typingText}
-                      {isTyping && <span className="typing-cursor">|</span>}
-                    </div>
-                  </div>
-
-                  <div className="profile-specialties">
-                    <h4>Specialties:</h4>
-                    <div className="specialties-grid">
-                      {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].specialties.map((specialty, index) => (
-                        <span key={index} className="specialty-badge">
-                          {specialty}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+              <div className="profile-description">
+                <div className="typing-text">
+                  {typingText}
+                  {isTyping && <span className="typing-cursor">|</span>}
                 </div>
-              )}
+              </div>
+
+              <div className="profile-specialties">
+                <h4>Specialties:</h4>
+                <div className="specialties-grid">
+                  {AGENT_PERSONAS[expandedPersona as keyof typeof AGENT_PERSONAS].specialties.map((specialty, index) => (
+                    <span key={index} className="specialty-badge">
+                      {specialty}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </>
-      )}
+          )}
+        </div>
+      </div>
     </div>
   );
 }
